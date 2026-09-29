@@ -2,7 +2,7 @@
 
 # 🛡️ GeoZone
 
-### A real-time collaborative workspace with an AI-powered npm supply chain security assistant
+### A geospaital analysis platform designed to help users explore, analyze and understand areas of interests.
 
 [![Status](https://img.shields.io/badge/status-active%20development-brightgreen?style=flat-square)](https://github.com/yourusername/collabai)
 [![Backend](https://img.shields.io/badge/backend-FastAPI-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
@@ -15,56 +15,70 @@
 
 ---
 
-## What Is CollabAI?
+## What Is GeoZone?
 
-CollabAI is a **Collaborative workspace** built with a security-first mindset. Teams can organize work, manage projects, and collaborate in real time. The AI layer is purpose-built for a real-world problem: **detecting and alerting on npm registry supply chain attacks**.
+GeoZone is a geospatial analysis platform designed to help users explore, analyze, and understand areas of interest (AOIs). The platform brings together interactive mapping, zoning data, property information, and location-based insights in a single workspace.
 
-Supply chain attacks like [event-stream](https://blog.npmjs.org/post/180565383195/details-about-the-event-stream-incident), [ua-parser-js](https://github.com/advisories/GHSA-pjwm-rvh2-c87w), and [node-ipc](https://snyk.io/blog/peacenotwar-malicious-npm-node-ipc-package-vulnerability/) have compromised millions of developer environments. CollabAI's AI assistant monitors the npm registry in context, surfaces anomalies, and helps development teams act fast.
+Users can search for a location, define an AOI, and view a summarized breakdown of the area, including zoning classifications, land use, development requirements, and surrounding zoning information. AOIs can also be saved, organized into projects, and exported for further analysis or sharing.
 
-> **This is not a toy project.** It is a production-architecture application built to demonstrate full-stack depth, real-time systems, secure auth design, and applied AI — all in a single coherent product.
+While GeoZone is initially focused on real estate zoning and site analysis, the underlying platform is designed to support a broader range of geospatial use cases where users need to define an area, analyze its surrounding data, and turn geospatial information into actionable insights.
 
 ---
 
 ## Core Features
 
-| Feature                                         | Status         |
-| ----------------------------------------------- | -------------- |
-| JWT Authentication with refresh token rotation  | ✅ Complete    |
-| HttpOnly cookie-based session management        | ✅ Complete    |
-| Multi-role PostgreSQL with Row Level Security   | ✅ Complete    |
-| Docker Compose orchestration (app + db + cache) | ✅ Complete    |
-| Redis token blacklist (logout/invalidation)     | ✅ Complete    |
-| Workspace & workspace member management         | 🔧 In Progress |
-| Real-time collaboration via WebSockets          | 🔧 In Progress |
-| AI workspace search assistant                   | 🗓️ Planned     |
-| npm supply chain anomaly detection & alerts     | 🗓️ Planned     |
+| Feature                                         | Status      |
+| ----------------------------------------------- | ----------- |
+| JWT Authentication with refresh token rotation  | ✅ Complete |
+| HttpOnly cookie-based session management        | ✅ Complete |
+| Multi-role PostgreSQL with Row Level Security   | ✅ Complete |
+| Docker Compose orchestration (app + db + cache) | ✅ Complete |
+| Redis token blacklist (logout/invalidation)     | ✅ Complete |
+
+---
+
+---
+
+## Tech Stack
+
+| Tech                     | Explanation / Description                                          |
+| ------------------------ | ------------------------------------------------------------------ |
+| Next.js / React          | React framework                                                    |
+| Shadcn UI                | UI Components                                                      |
+| Tailwind CSS             | UI Styling                                                         |
+| Zustand + TanStack Query | Lightweight global state mangement + API data fetching and caching |
+| FastAPI                  | Custom Backend Layer                                               |
+| Docker                   | Containerize the backend                                           |
+| PostgreSQL               | Relational Database                                                |
+| Analytics Tracking       | TBD                                                                |
+| JWT                      | JSON WEB Token for Authentication                                  |
+| MapBox GL JS             | 2D mapping                                                         |
+| AI Model                 | Claude                                                             |
 
 ---
 
 ## Architecture Overview
 
 ```
-collabai/
-├── frontend/                   # React SPA
-│   ├── src/
-│   │   ├── api/                # Axios client layer
-│   │   ├── assests/ # public images
-│   │   ├── components/     # shared Shadcn UI components
-│   │   ├── context/ # react context provider (Auth, TanStack Query, etc....)
-│   │   ├── features/ # business domain
-│   │   │    ├── auth/ # auth domain
-│   │   │          └──components/
-│   │   │          └── hooks/
-│   │   │          └──types/
-│   │   │    ├── workspace/ # workspace domain
-│   │   │          └── components/
-│   │   │          └──hooks/
-│   │   │          └──types/
-│   │   ├── lib/ # tailwind css merge
-│   │   ├── pages/ # App screens ( pages )
+geozoning/
+├── geozoning-frontend/                   # React SPA
+│   ├── app # routing pages
+│   ├── api/                # Axios client layer
+│   ├── assests/ # public images
+│   ├── components/     # shared Shadcn UI components
+│   ├── context/ # react context provider ( TanStack Query, etc....)
+│   ├── features/ # business features
+│   │    ├── auth/ # auth feature
+│   │          └──components/
+│   │          └── hooks/
+│   │          └──types/
+│   │   ├── dashboard/ # dashboard feature
+│   │          └── components/
+│   │          └──hooks/│          └──types/
+│   ├── lib/ # tailwind css merge
 │   └── Dockerfile
 │
-├── backend/                    # FastAPI application
+├── geozoning-backend/                    # FastAPI application
 │   ├── app/
 │   │   ├── api/            # Route handlers (HTTP boundary)
 │   │   ├── core/
@@ -77,11 +91,12 @@ collabai/
 │   │   ├── middleware/ # jwt middleware
 │   │   ├── modules/             # modular services
 │   │            └── auth/
-│   │            └── health/
+│   │            └── ai/
+│   │            └── zoning/
 │   │            └── models/  # Base SQLAlchemy ORM
-│   │            └── task/
-│   │            └── user/
-│   │            └── workspace/
+│   │
+│   │
+│   │
 │   ├── alembic/                # Database migrations
 │   ├── entrypoint.sh           # pg_isready readiness check + migration runner
 │   └── Dockerfile
@@ -93,64 +108,14 @@ collabai/
 
 ### System Diagram
 
-```
-                        ┌─────────────────────────┐
-                        │         Client          │
-                        │     React (Vite)    │
-                        └────────────┬────────────┘
-                                     │ HTTPS + HttpOnly Cookies
-                                     │
-                        ┌────────────▼────────────┐
-                        │      FastAPI Backend    │
-                        │  (Modular Monolothic)   │
-                        │                         │
-                        │  ┌─────────────────────┐│
-                        │  │    ROUTER LAYER      ││  ← HTTP boundary
-                        │  │                     ││     Validates requests
-                        │  │  • auth_router      ││     Catches Python errors
-                        │  │  • workspace_router ││     Returns HTTPException
-                        │  │  • members_router   ││     Parses Pydantic schemas
-                        │  └──────────┬──────────┘│
-                        │             │            │
-                        │  ┌──────────▼──────────┐│
-                        │  │    SERVICE LAYER     ││  ← Business logic
-                        │  │                     ││     Orchestrates operations
-                        │  │  • auth_service     ││     Calls Redis + DB
-                        │  │  • workspace_service││     Token rotation logic
-                        │  │  • member_service   ││     Raises Python builtins
-                        │  └──────────┬──────────┘│
-                        │             │            │
-                        │  ┌──────────▼──────────┐│
-                        │  │     DATA LAYER       ││  ← Persistence only
-                        │  │                     ││     SQLAlchemy ORM
-                        │  │  • user_data        ││     Async sessions
-                        │  │  • workspace_data   ││     No HTTP concerns
-                        │  │  • token_data       ││     RLS enforced here
-                        │  └──────────┬──────────┘│
-                        │             │            │
-                        └─────────────┼────────────┘
-                 ┌───────────────┬────┘
-                 │               │
-    ┌────────────▼──────┐  ┌─────▼──────────────────┐
-    │    PostgreSQL     │  │        Redis            │
-    │                   │  │                         │
-    │  RLS per user     │  │  • Token blacklist      │
-    │                   │  │  • Session cache        │
-    │  Roles:           │  └─────────────────────────┘
-    │  • myapp_owner    │
-    │    (migrations)   │
-    │  • fastapi_user   │
-    │    (app queries)  │
-    │  • authenticated  │
-    │    (RLS context)  │
-    └───────────────────┘
-```
+**MVP Diagram**
+![GeoZone System Diagram](image.png)
 
 ---
 
 ## Security Design
 
-Security is a first class concern in CollabAI, by design, because the product itself is security tooling.
+Security is a first class concern in GeoZone, by design.
 
 ### Authentication & Session Management
 
@@ -204,17 +169,6 @@ CollabAI's AI layer is being built in two phases:
 ### Phase 1 — Workspace Search Assistant
 
 A natural language interface to query workspace content: tasks, documents, members, activity history. Built on top of the existing workspace data model with a retrieval augmented generation (RAG) approach.
-
-### Phase 2 — npm Supply Chain Attack Detection
-
-The flagship feature. The assistant will:
-
-- Monitor the npm registry for newly published or updated packages used in a workspace's tracked projects
-- Surface behavioral anomalies: sudden maintainer changes, new install scripts, unexpected dependency additions, version squatting
-- Cross reference against known attack signatures (e.g., patterns from `event-stream`, `ua-parser-js`, `node-ipc`)
-- Alert workspace members with actionable context, not just "this package is flagged" but _why_ and _what to do_
-
-This is a real problem that affects real development teams. CollabAI is being built to solve it.
 
 ---
 
