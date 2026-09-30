@@ -1,3 +1,8 @@
 geozoning-backend/.venv
 /geozoning/*/__pycache__/
 __pycache__/
+
+/geozoning-backend/.env.*
+/geozoning-frontend/.env.*
+
+.env.*

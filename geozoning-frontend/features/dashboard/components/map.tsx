@@ -1,6 +1,8 @@
 import { useRef, useEffect } from "react";
 import * as mapboxgl from "mapbox-gl/esm";
 import "mapbox-gl/dist/mapbox-gl.css";
+const key = process.env.MAP_BOX_KEY;
+
 function Map() {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -16,7 +18,7 @@ function Map() {
     if (!container) return;
 
     mapRef.current = new mapboxgl.Map({
-      accessToken: "",
+      accessToken: key,
       container,
       style: "mapbox://styles/mapbox/standard", // style URL
       center: [-77.0469, 38.8048], // Starting position near Old Town Alexandria
