@@ -1,0 +1,106 @@
+services:
+  postgresql_db:
+    image: postgres:18-alpine
+    container_name: postgresql-db
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD_FILE=/run/secrets/POSTGRES_PASSWORD
+    secrets:
+      - source: POSTGRES_PASSWORD
+        target: POSTGRES_PASSWORD
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - postgresql_db_data:/var/lib/postgresql
+    networks:
+      - app_network
+  
+  redis:
+    image: redis:7.4-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    secrets:
+      - source: REDIS_PASSWORD
+        target: REDIS_PASSWORD
+    command: sh -c 'PASSWORD=$$(cat /run/secrets/REDIS_PASSWORD) && exec redis-server --save 20 1 --loglevel warning --requirepass "$$PASSWORD"'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: sh -c 'PASSWORD=$$(cat /run/secrets/REDIS_PASSWORD) && redis-cli --no-auth-warning -a "$$PASSWORD" PING | grep -q PONG'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app_network
+  
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: collabai-app-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env.development
+    secrets:
+      - POSTGRES_PASSWORD
+    restart: always
+    depends_on:
+      postgresql_db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/api/v1/health/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - app_network
+      
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: collabai-app-frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    env_file:
+      - ./frontend/.env.development
+    environment:
+      - CI=true
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - app_network
+
+secrets:
+  POSTGRES_PASSWORD:
+    file: ./secrets/postgres_password.txt
+  REDIS_PASSWORD:
+    file: ./secrets/redis_password.txt
+volumes:
+  postgresql_db_data:
+  redis_data:
+
+networks:
+  app_network:
+    driver: bridge

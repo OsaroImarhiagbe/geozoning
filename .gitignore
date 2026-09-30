@@ -1,0 +1,3 @@
+geozoning-backend/.venv
+/geozoning/*/__pycache__/
+__pycache__/

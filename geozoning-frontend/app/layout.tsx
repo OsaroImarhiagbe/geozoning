@@ -2,11 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/features/dashboard/components/app-sidebar";
 import DashboardHeader from "@/features/dashboard/components/dashboard-header";
 const geistSans = Geist({
@@ -36,7 +32,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <AppSidebar />
             <SidebarInset>
               <header className="flex h-[72px] shrink-0 items-center justify-between gap-2 px-4 bg-[#0B1726]">
-                <SidebarTrigger />
                 <DashboardHeader />
               </header>
               <main className="min-h-screen w-full">{children}</main>

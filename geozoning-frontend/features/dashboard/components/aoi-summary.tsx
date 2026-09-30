@@ -55,19 +55,19 @@ export default function AOISummary() {
       <CardContent className="overflow-auto p-4">
         {/* Tabs */}
         <div className="mb-5 flex gap-5 border-b text-xs">
-          <button className="border-b-2 border-blue-600 pb-3 font-medium text-blue-600">
+          <button className="border-b-2 border-blue-600 pb-3 font-medium text-blue-600 font-mono">
             Zoning
           </button>
 
-          <button className="pb-3 text-slate-500 hover:text-slate-900">
+          <button className="pb-3 text-[#0F172A] font-mono hover:text-slate-900">
             Land Use
           </button>
 
-          <button className="pb-3 text-slate-500 hover:text-slate-900">
+          <button className="pb-3 text-[#0F172A] font-mono hover:text-slate-900">
             Property Details
           </button>
 
-          <button className="pb-3 text-slate-500 hover:text-slate-900">
+          <button className="pb-3 text-[#0F172A] font-mono hover:text-slate-900">
             More
           </button>
         </div>
@@ -80,17 +80,19 @@ export default function AOISummary() {
             </div>
 
             <div>
-              <p className="text-xs font-medium text-emerald-600">
+              <p className="text-xs font-medium text-emerald-600 font-mono">
                 Current Zoning
               </p>
 
-              <p className="mt-0.5 text-xl font-semibold">C-3</p>
+              <p className="mt-0.5 text-xl font-semibold font-mono">C-3</p>
 
-              <p className="text-sm text-slate-600">General Commercial</p>
+              <p className="text-sm text-slate-600 font-mono">
+                General Commercial
+              </p>
             </div>
           </div>
 
-          <p className="mt-3 text-xs leading-5 text-slate-500">
+          <p className="mt-3 text-xs leading-5 text-slate-500 font-mono">
             Allows for a wide range of commercial uses including retail, office,
             and mixed-use developments.
           </p>
@@ -98,7 +100,7 @@ export default function AOISummary() {
           <Button
             variant="link"
             size="sm"
-            className="mt-2 h-auto p-0 text-blue-600"
+            className="mt-2 h-auto p-0 text-blue-600 font-mono"
           >
             View zoning details
             <ArrowRight className="ml-1 h-3 w-3" />
