@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/features/dashboard/components/app-sidebar";
 import DashboardHeader from "@/features/dashboard/components/dashboard-header";
+import { QueryContextProvider } from "@/context/queryContext";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -27,17 +28,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body>
-        <TooltipProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <header className="flex h-[72px] shrink-0 items-center justify-between gap-2 px-4 bg-[#0B1726]">
-                <DashboardHeader />
-              </header>
-              <main className="min-h-screen w-full">{children}</main>
-            </SidebarInset>
-          </SidebarProvider>
-        </TooltipProvider>
+        <QueryContextProvider>
+          <TooltipProvider>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset>
+                <header className="flex h-[72px] shrink-0 items-center justify-between gap-2 px-4 bg-[#0B1726]">
+                  <DashboardHeader />
+                </header>
+                <main className="min-h-screen w-full">{children}</main>
+              </SidebarInset>
+            </SidebarProvider>
+          </TooltipProvider>
+        </QueryContextProvider>
       </body>
     </html>
   );

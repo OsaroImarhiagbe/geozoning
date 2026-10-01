@@ -1,7 +1,5 @@
 "use client";
-
 import { ArrowDownToLine, Bookmark, Building2, Target } from "lucide-react";
-
 import Map from "@/features/dashboard/components/map";
 import RecentAOI from "@/features/dashboard/components/recent-aoi";
 import AOISummary from "@/features/dashboard/components/aoi-summary";
