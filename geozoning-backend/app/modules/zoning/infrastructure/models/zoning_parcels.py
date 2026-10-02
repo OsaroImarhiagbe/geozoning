@@ -1,7 +1,6 @@
 from datetime import datetime
 from uuid import UUID
-
-from sqlalchemy import Boolean, DateTime, String, func,Float
+from sqlalchemy import Boolean, DateTime, String, func, Float
 from sqlalchemy.orm import Mapped, mapped_column
 from geoalchemy2 import Geometry
 from app.modules.models.base import Base
@@ -15,28 +14,33 @@ class Parcels(Base):
         primary_key=True, 
         index=True,
         unique=True,
-        server_default=func.uuid7(),
+        server_default=func.gen_random_uuid(),
         comment="Id of parcel") ## this is using v4 uuid
     
     pid:Mapped[int] = mapped_column(
         unique=True,
+        nullable=True,
         comment="parcel id")
     
-    address:Mapped[String] = mapped_column(
+    address:Mapped[str] = mapped_column(
+        String(30),
         unique=True,
         nullable=False
     )
-    zone_code:Mapped[String] = mapped_column(
-        nullable=False,
+    zone_code:Mapped[str] = mapped_column(
+        String(30),
+        nullable=True,
         comment="zoning code"
     )
 
-    land_desc:Mapped[String] = mapped_column(
-        nullable=False,
+    land_desc:Mapped[str] = mapped_column(
+        String(30),
+        nullable=True,
         comment="Description of land"
     )
-    land_sf:Mapped[Float] = mapped_column(
-        nullable=False,
+    land_sf:Mapped[float] = mapped_column(
+        Float,
+        nullable=True,
         comment="Land Sf"
     )
     geometry:Mapped[Geometry] = mapped_column(

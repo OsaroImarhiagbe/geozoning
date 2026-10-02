@@ -5,9 +5,9 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.infrastructure.db.session import AsyncSessionLocal
-from app.middleware.dependencies import get_current_user_id
+# from app.middleware.dependencies import get_current_user_id
 
-get_current_user_id_dependency = Annotated[str,Depends(get_current_user_id)]
+# get_current_user_id_dependency = Annotated[str,Depends(get_current_user_id)]
 
 # Public — registration, login, refresh
 async def get_db():
@@ -21,14 +21,14 @@ async def get_db():
             await session.close()
 
 # Protected — all authenticated routes
-async def get_auth_db(user_id:get_current_user_id_dependency,db: AsyncSession = Depends(get_db)):
-    await db.execute(text("SET LOCAL ROLE authenticated"))
-    await db.execute(
-        text("SET LOCAL app.current_user_id = :user_id"),
-        {"user_id": user_id}
-    )
+async def get_auth_db(db: AsyncSession = Depends(get_db)):
+    # await db.execute(text("SET LOCAL ROLE authenticated"))
+    # await db.execute(
+    #     text("SET LOCAL app.current_user_id = :user_id"),
+    #     {"user_id": user_id}
+    # )
     yield db
-
+# user_id:get_current_user_id_dependency
 
 # async def get_db(current_user:get_current_user_id_dependency):
 #     async with AsyncSessionLocal() as session:

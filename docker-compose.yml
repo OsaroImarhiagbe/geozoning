@@ -25,7 +25,7 @@ services:
 
   redis:
     image: redis:7.4-alpine
-    container_name: redis
+    container_name: geozone-redis
     restart: always
     ports:
       - "6379:6379"
@@ -46,15 +46,15 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: ./geozoning-backend
       dockerfile: Dockerfile
-    container_name: collabai-app-backend
+    container_name: geozoning-app-backend
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - ./geozoning-backend:/app
     env_file:
-      - ./backend/.env.development
+      - ./geozoning-backend/.env.development
     secrets:
       - POSTGRES_PASSWORD
     restart: always

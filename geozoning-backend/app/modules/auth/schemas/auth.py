@@ -1,62 +1,62 @@
-from enum import Enum
-from uuid import UUID
+# from enum import Enum
+# from uuid import UUID
 
-from pydantic import BaseModel, EmailStr, SecretStr
-
-
-# User Authentication Role
-class Role(Enum):
-    ADMIN = 'admin'
-    USER = 'user'
-    GUEST = 'guest'
-
-# User Email verification Value
-class Email_Verified(Enum):
-    is_verified = True
-    not_verified = False
-
-# Auth Request Object
-class RefreshRequest(BaseModel):
-    user_id:UUID
-    roles:str
-
-class RefreshResponse(BaseModel):
-    access_token:str
-
-class LoginRequest(BaseModel):
-    name:str
-    email: EmailStr
-    password:SecretStr
-
-class RegisterRequest(BaseModel):
-    name:str
-    email:str
-    password:SecretStr
+# from pydantic import BaseModel, EmailStr, SecretStr
 
 
-# Authentication Response Object
-class UserAuthenticationData(BaseModel):
-    user_id:UUID
-    email:EmailStr
+# # User Authentication Role
+# class Role(Enum):
+#     ADMIN = 'admin'
+#     USER = 'user'
+#     GUEST = 'guest'
 
-class Token(BaseModel):
-    access_token: str
-    refresh_token:str
-    user:UserAuthenticationData
+# # User Email verification Value
+# class Email_Verified(Enum):
+#     is_verified = True
+#     not_verified = False
 
-class TokenResponse(BaseModel):
-    status:int
-    error:str | None = None
-    data: Token
+# # Auth Request Object
+# class RefreshRequest(BaseModel):
+#     user_id:UUID
+#     roles:str
 
-class TokenPayload(BaseModel):
-    sub: str | None = None
-    exp: int | None = None
-    roles: list[str] = []
+# class RefreshResponse(BaseModel):
+#     access_token:str
 
-class TokenData(BaseModel):
-    username: str | None = None
+# class LoginRequest(BaseModel):
+#     name:str
+#     email: EmailStr
+#     password:SecretStr
+
+# class RegisterRequest(BaseModel):
+#     name:str
+#     email:str
+#     password:SecretStr
 
 
-class RefreshTokenRespone(BaseModel):
-    access_token:str
+# # Authentication Response Object
+# class UserAuthenticationData(BaseModel):
+#     user_id:UUID
+#     email:EmailStr
+
+# class Token(BaseModel):
+#     access_token: str
+#     refresh_token:str
+#     user:UserAuthenticationData
+
+# class TokenResponse(BaseModel):
+#     status:int
+#     error:str | None = None
+#     data: Token
+
+# class TokenPayload(BaseModel):
+#     sub: str | None = None
+#     exp: int | None = None
+#     roles: list[str] = []
+
+# class TokenData(BaseModel):
+#     username: str | None = None
+
+
+# class RefreshTokenRespone(BaseModel):
+#     access_token:str

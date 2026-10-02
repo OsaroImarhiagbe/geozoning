@@ -3,6 +3,7 @@ from typing import Annotated
 from app.modules.zoning.schemas.zoning_schema import ZoningQuery
 from app.modules.zoning.service.zoning_service import ZoningService
 from app.modules.zoning.service.dependencies import get_zoning_service
+from app.modules.zoning.schemas.zoning_schema import ParcelResponse
 router = APIRouter(tags=["zoning"])
 
 #`GET /api/zoning/parcels?min_lng=-77.12&min_lat=38.78&max_lng=-77.01&max_lat=38.85`
@@ -31,9 +32,10 @@ router = APIRouter(tags=["zoning"])
 
 
 get_zoning_service_dependency = Annotated[ZoningService, Depends(get_zoning_service)]
-@router.get('/parcels',tags=['zoning'])
-async def get_zones(service: get_zoning_service_dependency, filter_query: Annotated[ZoningQuery, Query()]):
+@router.get('/parcels',response_model=ParcelResponse,tags=['zoning'])
+async def get_zones(service: get_zoning_service_dependency, filter_query: Annotated[ZoningQuery, Query()]) -> ParcelResponse:
     """
     Endpoint is getting parcels zones based on bounding area
     """
-    return await service.zones(min_lng=filter_query.min_lng,min_lat=filter_query.min_lat,max_lng=filter_query.max_lng,max_lat=filter_query.max_lat)
+    resposne = await service.zones(min_lng=filter_query.min_lng,min_lat=filter_query.min_lat,max_lng=filter_query.max_lng,max_lat=filter_query.max_lat)
+    return resposne

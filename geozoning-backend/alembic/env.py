@@ -3,9 +3,12 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
+
+from geoalchemy2 import alembic_helpers
 from alembic import context
 from app.core.config import settings
 from app.modules.models.base import Base
+from app.modules.zoning.infrastructure.models.zoning_parcels import Parcels
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -39,12 +42,20 @@ def run_migrations_offline() -> None:
     script output.
 
     """
+    def include_object(obj, name, type_, reflected, compare_to):
+    # never touch tables that exist in the DB but not in your models
+        if type_ == "table" and reflected and compare_to is None:
+            return False
+        return alembic_helpers.include_object(obj, name, type_, reflected, compare_to)
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        include_object=include_object,
+        process_revision_directives=alembic_helpers.writer,
+        render_item=alembic_helpers.render_item,
     )
 
     with context.begin_transaction():
