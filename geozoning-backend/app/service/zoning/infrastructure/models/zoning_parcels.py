@@ -3,12 +3,12 @@ from uuid import UUID
 from sqlalchemy import Boolean, DateTime, String, func, Float
 from sqlalchemy.orm import Mapped, mapped_column
 from geoalchemy2 import Geometry
-from app.modules.models.base import Base
+from app.infrastructure.db.base_models.base import Base
 
 
-class Parcels(Base):
+class Zoning_Parcels(Base):
 
-    __tablename__ = "parcels"
+    __tablename__ = "zoning_parcels"
 
     id:Mapped[UUID] = mapped_column(
         primary_key=True, 

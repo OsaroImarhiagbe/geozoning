@@ -27,13 +27,15 @@ While GeoZone is initially focused on real estate zoning and site analysis, the 
 
 ## Core Features
 
-| Feature                                         | Status      |
-| ----------------------------------------------- | ----------- |
-| JWT Authentication with refresh token rotation  | ✅ Complete |
-| HttpOnly cookie-based session management        | ✅ Complete |
-| Multi-role PostgreSQL with Row Level Security   | ✅ Complete |
-| Docker Compose orchestration (app + db + cache) | ✅ Complete |
-| Redis token blacklist (logout/invalidation)     | ✅ Complete |
+| Features                                         | Status    |
+| ------------------------------------------------ | --------- |
+| User authentication                              | Completed |
+| Interactive map with Mapbox GL JS                | Completed |
+| AOI drawing tool (polygon, rectangle, radius)    |           |
+| Zoning data overlay rendered on the map          |           |
+| Zoning breakdown analysis within the drawn AOI   |           |
+| AI-generated summary of the AOI's zoning profile |           |
+| Exportable report (PDF) of the AOI analysis      |           |
 
 ---
 

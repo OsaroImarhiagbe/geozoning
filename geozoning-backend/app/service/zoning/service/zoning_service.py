@@ -1,6 +1,7 @@
-from app.modules.zoning.infrastructure.zoning_dal.zoning_dal import ZoningRepository
-from app.modules.zoning.schemas.zoning_schema import ParcelResponse, ParcelFeatureCollection
+from app.service.zoning.infrastructure.zoning_dal.zoning_dal import ZoningRepository
+from app.service.zoning.schemas.zoning_schema import ParcelResponse, ParcelFeatureCollection
 from fastapi import status
+
 class ZoningService:
     """
     Service handles zoning for the AOI

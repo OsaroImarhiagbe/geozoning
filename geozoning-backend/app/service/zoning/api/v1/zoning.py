@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status, Query
 from typing import Annotated
-from app.modules.zoning.schemas.zoning_schema import ZoningQuery
-from app.modules.zoning.service.zoning_service import ZoningService
-from app.modules.zoning.service.dependencies import get_zoning_service
-from app.modules.zoning.schemas.zoning_schema import ParcelResponse
+from app.service.zoning.schemas.zoning_schema import ZoningQuery
+from app.service.zoning.service.zoning_service import ZoningService
+from app.service.zoning.service.dependencies import get_zoning_service
+from app.service.zoning.schemas.zoning_schema import ParcelResponse
 router = APIRouter(tags=["zoning"])
 
 #`GET /api/zoning/parcels?min_lng=-77.12&min_lat=38.78&max_lng=-77.01&max_lat=38.85`

@@ -2,8 +2,8 @@
 from fastapi import APIRouter
 
 # from app.modules.auth.api.v1.auth import router as auth_router
-from app.modules.health.api.v1.health import router as health_router
-from app.modules.zoning.api.v1.zoning import router as zoning_router
+from app.service.health.api.v1.health import router as health_router
+from app.service.zoning.api.v1.zoning import router as zoning_router
 router = APIRouter()
 
 

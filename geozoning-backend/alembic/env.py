@@ -7,8 +7,8 @@ from sqlalchemy import pool
 from geoalchemy2 import alembic_helpers
 from alembic import context
 from app.core.config import settings
-from app.modules.models.base import Base
-from app.modules.zoning.infrastructure.models.zoning_parcels import Parcels
+from app.infrastructure.db.base_models.base import Base
+from app.service.zoning.infrastructure.models.zoning_parcels import Zoning_Parcels
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

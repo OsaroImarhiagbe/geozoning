@@ -22,6 +22,16 @@ services:
       - postgresql_db_data:/var/lib/postgresql
     networks:
       - app_network
+  gdal:
+    image: ghcr.io/osgeo/gdal:ubuntu-small-latest
+    profiles: ["tools"] # never starts on a plain `up`
+    depends_on:
+      postgresql_db: { condition: service_healthy }
+    environment:
+      PGPASSWORD: secret
+    volumes: ["./data:/geo:ro"]
+    networks:
+      - app_network
 
   redis:
     image: redis:7.4-alpine
@@ -72,27 +82,6 @@ services:
       start_period: 15s
     networks:
       - app_network
-
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   container_name: collabai-app-frontend
-  #   ports:
-  #     - "8080:8080"
-  #   volumes:
-  #     - ./frontend:/app
-  #     - /app/node_modules
-  #   env_file:
-  #     - ./frontend/.env.development
-  #   environment:
-  #     - CI=true
-  #   restart: always
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - app_network
-
 secrets:
   POSTGRES_PASSWORD:
     file: ./secrets/postgres_password.txt
@@ -101,7 +90,7 @@ secrets:
 volumes:
   postgresql_db_data:
   redis_data:
-
+  pgdata:
 networks:
   app_network:
     driver: bridge
