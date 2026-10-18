@@ -3,8 +3,8 @@ import { ArrowDownToLine, Bookmark, Building2, Target } from "lucide-react";
 import Map from "@/features/dashboard/components/map";
 import RecentAOI from "@/features/dashboard/components/recent-aoi";
 import AOISummary from "@/features/dashboard/components/aoi-summary";
-import DashboardSearch from "@/features/dashboard/components/dashboard-search";
 import QuickAction from "@/features/dashboard/components/quick-action";
+import DashboardSearch from "@/features/dashboard/components/dashboard-search";
 
 export default function HomePage() {
   return (
