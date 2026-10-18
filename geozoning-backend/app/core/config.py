@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     # Algorithm secret or not???
     algorithm:SecretStr
 
-    # Redia
+    # Redis
     redis_host:str
     redis_db:int
     redis_port:int

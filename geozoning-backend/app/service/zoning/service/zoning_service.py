@@ -16,6 +16,7 @@ class ZoningService:
         """
         response = await self.__repo.find_parcels_by_bbox(min_lng=min_lng,min_lat=min_lat,max_lng=max_lng,max_lat=max_lat)
 
+        print("response:", response)
         return ParcelResponse(
             status=status.HTTP_200_OK,
             error="",
