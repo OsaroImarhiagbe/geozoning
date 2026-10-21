@@ -19,7 +19,7 @@ services:
       retries: 5
       start_period: 10s
     volumes:
-      - postgresql_db_data:/var/lib/postgresql
+      - postgresql_db_data:/var/lib/postgresql/data
     networks:
       - app_network
   gdal:
@@ -87,10 +87,12 @@ secrets:
     file: ./secrets/postgres_password.txt
   REDIS_PASSWORD:
     file: ./secrets/redis_password.txt
+
 volumes:
   postgresql_db_data:
   redis_data:
   pgdata:
+
 networks:
   app_network:
     driver: bridge

@@ -75,6 +75,7 @@ export default function Map() {
       style: "mapbox://styles/mapbox/standard",
       center: ALEXANDRIA_CENTER,
       zoom: 13,
+      maxBounds: ALEXANDRIA_BOUNDS,
     });
 
     mapRef.current.on("load", () => {
@@ -98,34 +99,7 @@ export default function Map() {
       // Add empty parcel source — data gets added once fetched
       mapRef.current?.addSource("alexandria", {
         type: "geojson",
-        data: {
-          type: "Feature",
-          geometry: {
-            type: "MultiPolygon",
-            coordinates: [
-              // Polygon 1 rings
-              [
-                [
-                  [-77.0425, 38.8436], // North-East corner near Potomac / National Airport
-                  [-77.0367, 38.8058], // Running South along the Potomac River edge
-                  [-77.0411, 38.7858], // South-East corner near Woodrow Wilson Bridge
-                  [-77.085, 38.798], // Tracing South-West border next to Fairfax County
-                  [-77.1448, 38.8124],
-                ],
-              ],
-              // Polygon 2 rings
-              [
-                [
-                  [-77.1264, 38.8359], // Moving North-East along the border
-                  [-77.0782, 38.8322], // Border line near Shirley Highway / I-395
-                  [-77.0601, 38.8459], // Northern border meeting Arlington County
-                  [-77.0425, 38.8436],
-                  [-77.0326, 38.8436],
-                ],
-              ],
-            ],
-          },
-        },
+        data: "/RealEstate_Parcels.geojson",
       });
 
       // Fill layer — colors parcel interiors by zone_code
@@ -135,23 +109,74 @@ export default function Map() {
         source: "alexandria",
         layout: {},
         paint: {
-          "fill-color": "#0080ff",
-          "fill-opacity": 0.5,
+          "fill-opacity": 0.6,
+          "fill-color": [
+            "match",
+            ["get", "ZONING"],
+            ["R-8", "R-12", "R-20", "RA", "RB"],
+            "#f2c94c", // residential low
+            ["RM", "RS", "RC"],
+            "#f2994a", // residential medium/high
+            ["CL", "CC", "CG", "CD"],
+            "#eb5757", // commercial
+            ["OC", "OCM", "OCH"],
+            "#9b51e0", // office
+            ["I", "W1"],
+            "#4f4f4f", // industrial
+            "#bdbdbd", // fallback for anything unmapped
+          ],
         },
       });
 
       // Line layer — draws parcel boundaries
-
       mapRef.current?.addLayer({
-        id: "multipoly-layer",
-        type: "fill",
+        id: "parcels-outline",
+        type: "line",
         source: "alexandria",
         paint: {
-          "fill-color": "#0080ff",
-          "fill-opacity": 0.5,
-          "fill-outline-color": "#000000",
+          "line-color": "#1d4ed8",
+          "line-width": 1.5,
         },
       });
+    });
+
+    // Pointer cursor on hover
+    mapRef.current?.on("mouseenter", "alexandria", () => {
+      const map = mapRef.current;
+      if (map) map.getCanvas().style.cursor = "pointer";
+    });
+    mapRef.current?.on("mouseleave", "alexandria", () => {
+      const map = mapRef.current;
+      if (map) map.getCanvas().style.cursor = "";
+    });
+
+    mapRef.current?.on("click", "alexandria", (e) => {
+      const p = e.features[0].properties;
+      mapRef.current?.setFilter("parcels-selected", [
+        "==",
+        ["get", "PID_RE"],
+        p.PID_RE,
+      ]);
+
+      const el = document.createElement("div");
+      const title = document.createElement("strong");
+      title.textContent = p.ADDRESS_GIS || "No address";
+      el.append(
+        title,
+        document.createElement("br"),
+        `Parcel ID: ${p.PID_RE}`,
+        document.createElement("br"),
+        `Zoning: ${p.ZONING}`,
+        document.createElement("br"),
+        `Land use: ${p.LANDDESC}`,
+        document.createElement("br"),
+        `Lot size: ${Number(p.LAND_SF).toLocaleString()} sf`,
+      );
+
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setDOMContent(el)
+        .addTo(mapRef.current);
     });
 
     // Update bbox in Zustand when user pans or zooms
