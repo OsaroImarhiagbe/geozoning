@@ -10,4 +10,5 @@ __pycache__/
 
 secrets/
 data/
-notes.txt
+Notes.txt/
+/geozoning-frontend/public/RealEstate_Parcels.geojson

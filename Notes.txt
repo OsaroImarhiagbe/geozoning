@@ -1,0 +1,31 @@
+      mapRef.current?.addSource("alexandria", {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          geometry: {
+            type: "MultiPolygon",
+            coordinates: [
+              // Polygon 1 rings
+              [
+                [
+                  [-77.0425, 38.8436], // North-East corner near Potomac / National Airport
+                    [-77.0367, 38.8058], // Running South along the Potomac River edge
+                    [-77.0411, 38.7858], // South-East corner near Woodrow Wilson Bridge
+                    [-77.085, 38.798], // Tracing South-West border next to Fairfax County
+                    [-77.1448, 38.8124],
+                ],
+              ],
+              // Polygon 2 rings
+              [
+                [
+                   [-77.1264, 38.8359], // Moving North-East along the border
+                    [-77.0782, 38.8322], // Border line near Shirley Highway / I-395
+                    [-77.0601, 38.8459], // Northern border meeting Arlington County
+                    [-77.0425, 38.8436],
+                    [-77.0326, 38.8436]
+                ],
+              ],
+            ],
+          },
+        },
+      });
